@@ -60,6 +60,14 @@ def calculate_part_time_wage():
 
 
 def calculate_appropriate_daily_wage(attendance):
+    """
+    Description: 
+        This function calculates appropriate wage of employee
+    Parameters:
+        attendance: Employee is present, part time or absent
+    Return:
+        int: daily wage
+    """
     employee_daily_wage = 0
     match attendance:
         case 0:
