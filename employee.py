@@ -14,6 +14,7 @@ import random
 
 WAGE_PER_HOUR = 20
 FULL_TIME_HOUR = 8
+PART_TIME_HOUR = 4
 
 
 print("--- Welcome to Employee Wage Computation Program ---")
@@ -36,6 +37,14 @@ def check_attendance():
     
 
 def calculate_daily_wage():
+    """
+    Description: 
+        This function calculates full time daily wage of employee
+    Parameters:
+        None
+    Return:
+        None
+    """
     daily_wage = 0
     if check_attendance():
         daily_wage = FULL_TIME_HOUR * WAGE_PER_HOUR
@@ -44,8 +53,25 @@ def calculate_daily_wage():
         print(f"The employee is absent, Daily wage is : {daily_wage}")
 
 
+def calculate_part_time_wage():
+    """
+    Description: 
+        This function calculates part time wage of employee
+    Parameters:
+        None
+    Return:
+        None
+    """
+    part_time_wage = 0
+    if check_attendance():
+        part_time_wage = PART_TIME_HOUR * WAGE_PER_HOUR
+        print(f"The employee is present part time, Daily wage is : {part_time_wage}")
+    else:
+        print(f"The employee is absent, Daily wage is : {part_time_wage}")
+
+
 if __name__ == "__main__":
-    calculate_daily_wage()
+   calculate_part_time_wage()
 
 
 
