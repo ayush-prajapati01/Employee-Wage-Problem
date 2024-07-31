@@ -12,6 +12,10 @@
 import random
 
 
+WAGE_PER_HOUR = 20
+FULL_TIME_HOUR = 8
+
+
 print("--- Welcome to Employee Wage Computation Program ---")
 
 
@@ -29,16 +33,19 @@ def check_attendance():
         return True                 
     else:
         return False
+    
 
-
-if check_attendance():
-    print("The employee is present")
-else:
-    print("The employee is absent")
+def calculate_daily_wage():
+    daily_wage = 0
+    if check_attendance():
+        daily_wage = FULL_TIME_HOUR * WAGE_PER_HOUR
+        print(f"The employee is present full time, Daily wage is : {daily_wage}")
+    else:
+        print(f"The employee is absent, Daily wage is : {daily_wage}")
 
 
 if __name__ == "__main__":
-    check_attendance()
+    calculate_daily_wage()
 
 
 
