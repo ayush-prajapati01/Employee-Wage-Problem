@@ -27,14 +27,10 @@ def check_attendance():
     Parameters:
         None
     Return:
-        boolean: True for present, False for absent
+        int: 0(Absent), 1(Present), 2(Present- Part time)
     """
-    if random.randint(0,1) == 1:
-        # Employee Present if choice equal to 1
-        return True                 
-    else:
-        return False
-    
+    return random.randint(0,2)
+
 
 def calculate_daily_wage():
     """
@@ -43,14 +39,10 @@ def calculate_daily_wage():
     Parameters:
         None
     Return:
-        None
+        int: daily full time wage
     """
-    daily_wage = 0
-    if check_attendance():
-        daily_wage = FULL_TIME_HOUR * WAGE_PER_HOUR
-        print(f"The employee is present full time, Daily wage is : {daily_wage}")
-    else:
-        print(f"The employee is absent, Daily wage is : {daily_wage}")
+    daily_wage = FULL_TIME_HOUR * WAGE_PER_HOUR
+    return daily_wage
 
 
 def calculate_part_time_wage():
@@ -60,18 +52,32 @@ def calculate_part_time_wage():
     Parameters:
         None
     Return:
-        None
+        int: daily part time wage
     """
-    part_time_wage = 0
-    if check_attendance():
-        part_time_wage = PART_TIME_HOUR * WAGE_PER_HOUR
-        print(f"The employee is present part time, Daily wage is : {part_time_wage}")
-    else:
-        print(f"The employee is absent, Daily wage is : {part_time_wage}")
+    part_time_wage = PART_TIME_HOUR * WAGE_PER_HOUR
+    return part_time_wage
+
+
+def main():
+    employee_daily_wage = 0
+    match check_attendance():
+        case 0:
+            print(f"Employee is Absent, Daily wage is: {employee_daily_wage}")
+        
+        case 1:
+            employee_daily_wage = calculate_daily_wage()
+            print(f"Employee is Present Full Time, Daily wage is: {employee_daily_wage}")
+        
+        case 2:
+            employee_daily_wage = calculate_part_time_wage()
+            print(f"Employee is Present Part Time, Daily wage is: {employee_daily_wage}")
+
+        case default:
+            print("Please enter a valid value")
 
 
 if __name__ == "__main__":
-   calculate_part_time_wage()
+   main()
 
 
 
