@@ -15,6 +15,7 @@ import random
 WAGE_PER_HOUR = 20
 FULL_TIME_HOUR = 8
 PART_TIME_HOUR = 4
+WORKING_DAYS = 20
 
 
 print("--- Welcome to Employee Wage Computation Program ---")
@@ -58,22 +59,42 @@ def calculate_part_time_wage():
     return part_time_wage
 
 
-def main():
+def calculate_appropriate_daily_wage(attendance):
     employee_daily_wage = 0
-    match check_attendance():
+    match attendance:
         case 0:
-            print(f"Employee is Absent, Daily wage is: {employee_daily_wage}")
+            return employee_daily_wage
         
         case 1:
             employee_daily_wage = calculate_daily_wage()
-            print(f"Employee is Present Full Time, Daily wage is: {employee_daily_wage}")
+            return employee_daily_wage
         
         case 2:
             employee_daily_wage = calculate_part_time_wage()
-            print(f"Employee is Present Part Time, Daily wage is: {employee_daily_wage}")
+            return employee_daily_wage
 
         case default:
-            print("Please enter a valid value")
+            return employee_daily_wage
+
+
+def calculate_monthly_wage():
+    """
+    Description: 
+        This function calculates part time wage of employee
+    Parameters:
+        None
+    Return:
+        int: daily part time wage
+    """
+    employee_monthly_wage = 0
+    for _ in range(WORKING_DAYS):
+        employee_monthly_wage += calculate_appropriate_daily_wage(check_attendance())
+    
+    return employee_monthly_wage
+
+
+def main():
+    print(f"\nEmployee Monthly Wage is: {calculate_monthly_wage()}")
 
 
 if __name__ == "__main__":
