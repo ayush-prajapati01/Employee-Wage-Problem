@@ -18,6 +18,7 @@ PART_TIME_HOUR = 4
 WORKING_DAYS = 20
 
 
+
 print("--- Welcome to Employee Wage Computation Program ---")
 
 
@@ -33,7 +34,7 @@ def check_attendance():
     return random.randint(0,2)
 
 
-def calculate_daily_wage():
+def calculate_full_time_daily_wage():
     """
     Description: 
         This function calculates full time daily wage of employee
@@ -74,7 +75,7 @@ def calculate_appropriate_daily_wage(attendance):
             return employee_daily_wage
         
         case 1:
-            employee_daily_wage = calculate_daily_wage()
+            employee_daily_wage = calculate_full_time_daily_wage()
             return employee_daily_wage
         
         case 2:
@@ -101,16 +102,65 @@ def calculate_monthly_wage():
     return employee_monthly_wage
 
 
+def calculate_wage_by_hours_days():
+    """
+    Description:
+        This function calculates wages till a condition of total
+        working hours or days is reached for a month.
+    Parameters:
+        None
+    Return:
+        int: wage based on hours and days worked
+    """
+    wage_by_hours_or_days = 0
+    hours = days = 0
+    while hours<=100 and days<=WORKING_DAYS:
+        attendance = check_attendance()
+        if attendance == 1:
+            hours += FULL_TIME_HOUR
+        elif attendance == 2:
+            hours += PART_TIME_HOUR
+
+        days += 1
+        wage_by_hours_or_days += calculate_appropriate_daily_wage(attendance)
+        
+        if hours >= 100 or days >= WORKING_DAYS:
+            break
+
+    return wage_by_hours_or_days
+
+
 def main():
-    print(f"\nEmployee Monthly Wage is: {calculate_monthly_wage()}")
+    print("Choose an option:")
+    print("1. Calculate Daily Wage")
+    print("2. Calculate Monthly Wage")
+    print("3. Calculate Wage by Hours and Days Condition")
+    choice = int(input("Enter your choice (1, 2, 3): "))
+
+    match choice:
+        case 1:
+            attendance = check_attendance()
+            if attendance == 0:
+                print("The employee is absent")
+            elif attendance == 1:
+                print("The employee is Present Full Time")
+            else:
+                print("The employee is Present Full Time")
+                
+            daily_wage = calculate_appropriate_daily_wage(attendance)
+            print(f"Daily Wage: {daily_wage}")
+        
+        case 2:
+            monthly_wage = calculate_monthly_wage()
+            print(f"Monthly Wage: {monthly_wage}")
+        
+        case 3:
+            conditional_wage = calculate_wage_by_hours_days()
+            print(f"Conditional Wage: {conditional_wage}")
+        
+        case _:
+            print("Invalid choice. Please enter 1, 2, or 3.")
 
 
 if __name__ == "__main__":
    main()
-
-
-
-
-
-
-
