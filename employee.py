@@ -103,9 +103,11 @@ class EmployeeWage:
             None
         Return:
             int: wage based on hours and days worked, hours, days
+            list: daily wage list
         """
         wage_by_hours_or_days = 0
         hours = days = 0
+        daily_wage_list = []
         while hours <= cls.MAX_WORKING_HOURS and days < cls.WORKING_DAYS:
             attendance = cls.check_attendance()
             if attendance == 1:
@@ -114,12 +116,13 @@ class EmployeeWage:
                 hours += cls.PART_TIME_HOUR
 
             days += 1
+            daily_wage_list.append(cls.calculate_appropriate_daily_wage(attendance))
             wage_by_hours_or_days += cls.calculate_appropriate_daily_wage(attendance)
             
             if hours >= cls.MAX_WORKING_HOURS or days >= cls.WORKING_DAYS:
-                break
+                break   
 
-        return wage_by_hours_or_days, hours, days
+        return wage_by_hours_or_days, hours, days, daily_wage_list
 
 
 def main():
@@ -147,10 +150,11 @@ def main():
                 print(f"Monthly Wage: {monthly_wage}")
             
             case 3:
-                conditional_wage, hours_worked, days_worked = EmployeeWage.calculate_wage_by_hours_days()
+                conditional_wage, hours_worked, days_worked, daily_wage_list = EmployeeWage.calculate_wage_by_hours_days()
                 print(f"Conditional Wage: {conditional_wage}")
                 print(f"Hours Worked by employee: {hours_worked}")
                 print(f"Days Worked by employee: {days_worked}")
+                print(f"Daily Wage List of employee: {daily_wage_list}")
             
             case _:
                 print("Invalid choice. Please enter 0, 1, 2, or 3.")
