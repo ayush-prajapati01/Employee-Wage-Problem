@@ -151,20 +151,68 @@ class Company:
         self.employees = []
 
     def add_employee(self, employee_name, wage_per_hour, working_days, max_working_hours):
+        """
+        Description: 
+            This function used to add employee
+        Parameters:
+            employee_name, wage_per_hour, working_days, max_working_hours
+        Return:
+            None
+        """
         employee_wage = EmployeeWage(employee_name, wage_per_hour, working_days, max_working_hours)
         self.employees.append(employee_wage)
 
     def get_employee(self, employee_name):
+        """
+        Description: 
+            This function used to get employee
+        Parameters:
+            employee_name
+        Return:
+            None
+        """
         for employee in self.employees:
             if employee.employee_name == employee_name:
                 return employee
         return None
 
+
     def display_employees(self):
+        """
+        Description: 
+            This function used to display employee
+        Parameters: None
+        Return:
+            None
+        """
         for employee in self.employees:
             print(f"Employee: {employee.employee_name}, Total Wage: {employee.total_wage}")
+    
+
+    def update_employee(self, old_employee_name, new_employee_name):
+        """
+        Description: 
+            This function used to update employee
+        Parameters: old_employee_name, new_employee_name
+        Return:
+            None
+        """
+        for i, employee in enumerate(self.employees):
+            if employee.employee_name == old_employee_name:
+                employee.employee_name = new_employee_name
+                print(f"Employee {old_employee_name} updated to {new_employee_name}.")
+                return
+        print(f"Employee {old_employee_name} not found in {self.company_name}.")
+
 
     def delete_employee(self, employee_name):
+        """
+        Description: 
+            This function used to delete employee
+        Parameters: employee_name
+        Return:
+            None
+        """
         for i, employee in enumerate(self.employees):
             if employee.employee_name == employee_name:
                 del self.employees[i]
@@ -174,6 +222,13 @@ class Company:
     
 
     def calculate_total_wage_hours(self):
+        """
+        Description: 
+            This function used to calculate total wage and hours worked of company
+        Parameters: 
+        Return:
+            int: company_total_wage, company_total_hours
+        """
         company_total_wage = company_total_hours = 0
         for employee in self.employees:
             company_total_wage += employee.total_wage
@@ -195,14 +250,28 @@ class EmpWageBuilder:
 
 
     def add_company(self, company_name):
+        """
+        Description: 
+            This function used to add company
+        Parameters: company_name
+        Return:
+            None
+        """
         if company_name not in self.companies:
             self.companies[company_name] = Company(company_name)
             print(f"Company {company_name} added.")
         else:
             print(f"Company {company_name} already exists.")
-
+        
 
     def add_company_employee(self, company_name, employee_name, wage_per_hour, working_days, max_working_hours):
+        """
+        Description: 
+            This function used to add employee to a company
+        Parameters: company_name, employee_name, wage_per_hour, working_days, max_working_hours
+        Return:
+            None
+        """
         if company_name in self.companies:
             company = self.companies[company_name]
             company.add_employee(employee_name, wage_per_hour, working_days, max_working_hours)
@@ -212,18 +281,55 @@ class EmpWageBuilder:
 
 
     def display_company_wages(self):
+        """
+        Description: 
+            This function used to display wages of company
+        Parameters: None
+        Return:
+            None
+        """
         for company_name, company in self.companies.items():
             print(f"Company: {company_name}")
             company.display_employees()
-    
+
+
     def display_total_company_wages_hours(self):
+        """
+        Description: 
+            This function used to display total wages and hours of company
+        Parameters: None
+        Return:
+            None
+        """
         for company_name, company in self.companies.items():
             company_total_wage, company_total_hours = company.calculate_total_wage_hours()
             print(f"Total wage for company {company_name}: {company_total_wage}")
             print(f"Total hours for company {company_name}: {company_total_hours}")
 
 
+    def update_company_employee(self, company_name, old_employee_name, new_employee_name):
+        """
+        Description: 
+            This function used to update name of the employee in the company
+        Parameters: company_name, old_employee_name, new_employee_name)
+        Return:
+            None
+        """
+        if company_name in self.companies:
+            company = self.companies[company_name]
+            company.update_employee(old_employee_name, new_employee_name)
+        else:
+            print(f"Company {company_name} not found.")
+
+
     def delete_company_employee(self, company_name, employee_name):
+        """
+        Description: 
+            This function used to update name of the employee in the company
+        Parameters: company_name, old_employee_name, new_employee_name)
+        Return:
+            None
+        """
         if company_name in self.companies:
             company = self.companies[company_name]
             company.delete_employee(employee_name)
@@ -232,6 +338,13 @@ class EmpWageBuilder:
 
 
     def list_companies(self):
+        """
+        Description: 
+            This function used to list all companies
+        Parameters: None
+        Return:
+            None
+        """
         if not self.companies:
             print("No companies added yet.")
         for company_name in self.companies:
@@ -239,11 +352,19 @@ class EmpWageBuilder:
 
 
     def delete_company(self, company_name):
+        """
+        Description: 
+            This function used delete a company
+        Parameters: company_name
+        Return:
+            None
+        """
         if company_name in self.companies:
             del self.companies[company_name]
             print(f"Company {company_name} deleted.")
         else:
             print(f"Company {company_name} not found.")
+    
 
 
 def employee_wage_menu(employee_wage):
@@ -294,20 +415,25 @@ def main():
         print("6. Display Total Wage")
         print("7. Display All Employees")
         print("8. Delete an Employee")
-        menu_choice = int(input("Enter your choice (0, 1, 2, 3, 4, 5, 6, 7, 8): "))
+        print("9. Update an Employee")
+        menu_choice = int(input("Enter your choice (0, 1, 2, 3, 4, 5, 6, 7, 8, 9): "))
 
         match menu_choice:
             case 0:
                 print("Thank you using our Software\nExiting.....")
                 break
+            
             case 1:
                 company_name = input("Enter the name of the company: ")
                 emp_wage_builder.add_company(company_name)
+            
             case 2:
                 company_name = input("Enter the name of the company to delete: ")
                 emp_wage_builder.delete_company(company_name)
+            
             case 3:
                 emp_wage_builder.list_companies()
+            
             case 4:
                 company_name = input("Enter the name of the company: ")
                 employee_name = input(f"Enter the {company_name} Employee name: ")
@@ -315,6 +441,7 @@ def main():
                 working_days = int(input("Enter monthly working days: "))
                 max_working_hours = int(input("Enter monthly working hours: "))
                 emp_wage_builder.add_company_employee(company_name, employee_name, wage_per_hour, working_days, max_working_hours)
+            
             case 5:
                 company_name = input("Enter the name of the company: ")
                 employee_name = input(f"Enter the {company_name} Employee name: ")
@@ -327,17 +454,29 @@ def main():
                         print(f"Employee {employee_name} not found in {company_name}.")
                 else:
                     print(f"Company {company_name} not found.")
+
             case 6:
                 emp_wage_builder.display_company_wages()
                 emp_wage_builder.display_total_company_wages_hours()
+
             case 7:
                 for company_name, company in emp_wage_builder.companies.items():
                     for employee_wage in company.employees:
                         print(f"{company_name}: {employee_wage.employee_name}")
+
             case 8:
                 company_name = input("Enter the name of the company: ")
                 employee_name = input(f"Enter the {company_name} Employee name: ")
                 emp_wage_builder.delete_company_employee(company_name, employee_name)
+
+            case 9:
+                company_name = input("Enter the name of the company: ")
+                old_employee_name = input(f"Enter the {company_name} old Employee name: ")
+                new_employee_name = input(f"Enter the {company_name} new Employee name: ")
+                emp_wage_builder.update_company_employee(company_name, old_employee_name, new_employee_name)
+            
+            case _:
+                print("Please enter a number from 0 to 9 only......")
 
 
 if __name__ == "__main__":
