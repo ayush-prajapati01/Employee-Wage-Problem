@@ -3,7 +3,7 @@
     @Author: Ayush Prajapati
     @Date: 01-07-2024 
     @Last Modified by: Ayush Prajapati
-    @Last Modified time: 03-07-2024 
+    @Last Modified time: 05-07-2024 
     @Title : Python program to implement Employee wage Problem
 
 '''
@@ -17,16 +17,14 @@ class EmployeeWage:
     Description: 
         This class is used for Employee Wage
     Parameters:
-        company_name, employee_name, wage_per_hour, working_days, max_working_hours
+        employee_name, wage_per_hour, working_days, max_working_hours
     Return:
         None
     """
-
     FULL_TIME_HOUR = 8
     PART_TIME_HOUR = 4
 
-    def __init__(self, company_name, employee_name, wage_per_hour, working_days, max_working_hours):
-        self.company_name = company_name
+    def __init__(self, employee_name, wage_per_hour, working_days, max_working_hours):
         self.employee_name = employee_name
         self.WAGE_PER_HOUR = wage_per_hour
         self.WORKING_DAYS = working_days
@@ -44,6 +42,7 @@ class EmployeeWage:
             int: 0 (Absent), 1 (Present), 2 (Present - Part time)
         """
         return random.randint(0, 2)
+
 
     def calculate_full_time_daily_wage(self):
         """
@@ -86,6 +85,7 @@ class EmployeeWage:
             return self.calculate_part_time_wage()
         else:
             return 0
+
 
     def calculate_monthly_wage(self):
         """
@@ -131,7 +131,119 @@ class EmployeeWage:
                 break
 
         self.total_wage = wage_by_hours_or_days
+        self.hours = hours
         return wage_by_hours_or_days, hours, days, daily_wage_list
+
+
+
+
+class Company:
+    """
+    Description:
+        This class is used to manage a company and its employees
+    Parameters:
+        company_name
+    Return:
+        None
+    """
+    def __init__(self, company_name):
+        self.company_name = company_name
+        self.employees = []
+
+    def add_employee(self, employee_name, wage_per_hour, working_days, max_working_hours):
+        employee_wage = EmployeeWage(employee_name, wage_per_hour, working_days, max_working_hours)
+        self.employees.append(employee_wage)
+
+    def get_employee(self, employee_name):
+        for employee in self.employees:
+            if employee.employee_name == employee_name:
+                return employee
+        return None
+
+    def display_employees(self):
+        for employee in self.employees:
+            print(f"Employee: {employee.employee_name}, Total Wage: {employee.total_wage}")
+
+    def delete_employee(self, employee_name):
+        for i, employee in enumerate(self.employees):
+            if employee.employee_name == employee_name:
+                del self.employees[i]
+                print(f"Employee {employee_name} removed from {self.company_name}.")
+                return
+        print(f"Employee {employee_name} not found in {self.company_name}.")
+    
+
+    def calculate_total_wage_hours(self):
+        company_total_wage = company_total_hours = 0
+        for employee in self.employees:
+            company_total_wage += employee.total_wage
+            company_total_hours += employee.hours
+        return company_total_wage, company_total_hours
+
+
+class EmpWageBuilder:
+    """
+    Description:
+        This class is used to build employee wages for multiple companies
+    Parameters:
+        None
+    Return:
+        None
+    """
+    def __init__(self):
+        self.companies = {}
+
+
+    def add_company(self, company_name):
+        if company_name not in self.companies:
+            self.companies[company_name] = Company(company_name)
+            print(f"Company {company_name} added.")
+        else:
+            print(f"Company {company_name} already exists.")
+
+
+    def add_company_employee(self, company_name, employee_name, wage_per_hour, working_days, max_working_hours):
+        if company_name in self.companies:
+            company = self.companies[company_name]
+            company.add_employee(employee_name, wage_per_hour, working_days, max_working_hours)
+            print(f"Employee {employee_name} added to company {company_name}.")
+        else:
+            print(f"Company {company_name} not found. Please add the company first.")
+
+
+    def display_company_wages(self):
+        for company_name, company in self.companies.items():
+            print(f"Company: {company_name}")
+            company.display_employees()
+    
+    def display_total_company_wages_hours(self):
+        for company_name, company in self.companies.items():
+            company_total_wage, company_total_hours = company.calculate_total_wage_hours()
+            print(f"Total wage for company {company_name}: {company_total_wage}")
+            print(f"Total hours for company {company_name}: {company_total_hours}")
+
+
+    def delete_company_employee(self, company_name, employee_name):
+        if company_name in self.companies:
+            company = self.companies[company_name]
+            company.delete_employee(employee_name)
+        else:
+            print(f"Company {company_name} not found.")
+
+
+    def list_companies(self):
+        if not self.companies:
+            print("No companies added yet.")
+        for company_name in self.companies:
+            print(f"Company: {company_name}")
+
+
+    def delete_company(self, company_name):
+        if company_name in self.companies:
+            del self.companies[company_name]
+            print(f"Company {company_name} deleted.")
+        else:
+            print(f"Company {company_name} not found.")
 
 
 def employee_wage_menu(employee_wage):
@@ -143,9 +255,9 @@ def employee_wage_menu(employee_wage):
     Return:
         None
     """
-    print(f"\nWelcome to {employee_wage.company_name}, Employee: {employee_wage.employee_name}")
+    print(f"\nWelcome Employee: {employee_wage.employee_name}")
     print("\nChoose an option:")
-    print("0. Press 0 to exit")
+    print("0. Press 0 to exit to main menu")
     print("1. Calculate Monthly Wage")
     print("2. Calculate Conditional Monthly Wage")
     choice = int(input("Enter your choice (0, 1, 2): "))
@@ -153,54 +265,17 @@ def employee_wage_menu(employee_wage):
     match choice:
         case 0:
             print(f"Exiting for {employee_wage.employee_name} ....")
-  
-        # case 1:
-        #     attendance = employee_wage.check_attendance()
-        #     daily_wage = employee_wage.calculate_appropriate_daily_wage(attendance)
-        #     print(f"Daily Wage: {daily_wage}")
-
         case 1:
             monthly_wage = employee_wage.calculate_monthly_wage()
             print(f"Monthly Wage: {monthly_wage}")
-
         case 2:
             conditional_wage, hours_worked, days_worked, daily_wage_list = employee_wage.calculate_wage_by_hours_days()
             print(f"Conditional Wage: {conditional_wage}")
             print(f"Hours Worked by employee: {hours_worked}")
             print(f"Days Worked by employee: {days_worked}")
             print(f"Daily Wage List of employee: {daily_wage_list}")
-
         case _:
             print("Invalid choice. Please enter 0, 1 or 2.")
-
-
-class EmpWageBuilder:
-    def __init__(self):
-        self.companies = {}
-
-    def add_company_employee(self, company_name, employee_name, wage_per_hour, working_days, max_working_hours):
-        employee_wage = EmployeeWage(company_name, employee_name, wage_per_hour, working_days, max_working_hours)
-        if company_name not in self.companies:
-            self.companies[company_name] = []
-        self.companies[company_name].append(employee_wage)
-
-    def display_company_wages(self):
-        for company_name, employees in self.companies.items():
-            print(f"Company: {company_name}")
-            for employee_wage in employees:
-                print(f"Employee: {employee_wage.employee_name}, Total Wage: {employee_wage.total_wage}")
-
-    def delete_company_employee(self, company_name, employee_name):
-        if company_name in self.companies:
-            employees = self.companies[company_name]
-            for i, employee_wage in enumerate(employees):
-                if employee_wage.employee_name == employee_name:
-                    del employees[i]
-                    print(f"Employee {employee_name} removed from {company_name}.")
-                    return
-            print(f"Employee {employee_name} not found in {company_name}.")
-        else:
-            print(f"Company {company_name} not found.")
 
 
 def main():
@@ -211,60 +286,58 @@ def main():
     while True:
         print("\nChoose an option:")
         print("0. Press 0 to exit")
-        print("1. Add Employee")
-        print("2. Calculate Employee Wage")
-        print("3. Display Total Wage")
-        print("4. Display All Employees")
-        print("5. Delete an Employee")
-        menu_choice = int(input("Enter your choice (0, 1, 2, 3, 4): "))
+        print("1. Add Company")
+        print("2. Delete Company")
+        print("3. List Companies")
+        print("4. Add Employee to a Company")
+        print("5. Calculate Employee Wage")
+        print("6. Display Total Wage")
+        print("7. Display All Employees")
+        print("8. Delete an Employee")
+        menu_choice = int(input("Enter your choice (0, 1, 2, 3, 4, 5, 6, 7, 8): "))
 
         match menu_choice:
             case 0:
                 print("Thank you using our Software\nExiting.....")
                 break
-            
             case 1:
-                employee_exists = False
+                company_name = input("Enter the name of the company: ")
+                emp_wage_builder.add_company(company_name)
+            case 2:
+                company_name = input("Enter the name of the company to delete: ")
+                emp_wage_builder.delete_company(company_name)
+            case 3:
+                emp_wage_builder.list_companies()
+            case 4:
                 company_name = input("Enter the name of the company: ")
                 employee_name = input(f"Enter the {company_name} Employee name: ")
                 wage_per_hour = int(input("Enter wage per hour: "))
                 working_days = int(input("Enter monthly working days: "))
                 max_working_hours = int(input("Enter monthly working hours: "))
-                for company_name, employees in emp_wage_builder.companies.items():
-                    for employee_wage in employees:
-                        if (employee_wage.employee_name == employee_name) and (employee_wage.company_name == company_name):
-                            employee_exists = True
-                            break
-                
-                if not employee_exists:
-                    emp_wage_builder.add_company_employee(company_name, employee_name, 
-                                                        wage_per_hour, working_days, max_working_hours) 
-                else:
-                    print(f"Employee {employee_name} is already present in company {company_name}")  
-            
-            case 2:
-                company_name = input("Enter the name of the company: ")
-                employee_name = input(f"Enter the {company_name} Employee name: ")
-                # Display the menu for each employee of each company
-                for company_name, employees in emp_wage_builder.companies.items():
-                    for employee_wage in employees:
-                        if (employee_wage.employee_name == employee_name) and (employee_wage.company_name == company_name):
-                            employee_wage_menu(employee_wage)
-
-            case 3:
-                # Display total wages for all companies and their employees
-                emp_wage_builder.display_company_wages()
-
-            case 4:
-                for company_name, employees in emp_wage_builder.companies.items():
-                    for employee_wage in employees:
-                        print(f"{company_name}: {employee_wage.employee_name}")  
-
+                emp_wage_builder.add_company_employee(company_name, employee_name, wage_per_hour, working_days, max_working_hours)
             case 5:
                 company_name = input("Enter the name of the company: ")
                 employee_name = input(f"Enter the {company_name} Employee name: ")
+                company = emp_wage_builder.companies.get(company_name)
+                if company:
+                    employee_wage = company.get_employee(employee_name)
+                    if employee_wage:
+                        employee_wage_menu(employee_wage)
+                    else:
+                        print(f"Employee {employee_name} not found in {company_name}.")
+                else:
+                    print(f"Company {company_name} not found.")
+            case 6:
+                emp_wage_builder.display_company_wages()
+                emp_wage_builder.display_total_company_wages_hours()
+            case 7:
+                for company_name, company in emp_wage_builder.companies.items():
+                    for employee_wage in company.employees:
+                        print(f"{company_name}: {employee_wage.employee_name}")
+            case 8:
+                company_name = input("Enter the name of the company: ")
+                employee_name = input(f"Enter the {company_name} Employee name: ")
                 emp_wage_builder.delete_company_employee(company_name, employee_name)
-
 
 
 if __name__ == "__main__":
